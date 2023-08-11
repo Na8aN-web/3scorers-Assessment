@@ -1,25 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
+import Overview from "./pages/dashboard/Overview";
+import Users from "./pages/dashboard/Users"
+import Admins from "./pages/dashboard/Admins"
+import ProtectedRoute from "../src/components/ProtectedRoute";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard/overview" element={<ProtectedRoute element={<Overview />} />} />
+        <Route path="/dashboard/users" element={<ProtectedRoute element={<Users />} />} />
+        <Route path="/dashboard/admins" element={<ProtectedRoute element={<Admins />} />} />
+      </Routes>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
