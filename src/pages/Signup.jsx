@@ -6,6 +6,7 @@ import axios from "axios";
 const Signup = () => {
   const navigate = useNavigate();
   const [signupError, setSignupError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -17,6 +18,8 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     try {
       const response = await axios.post(process.env.REACT_APP_SIGNUP_URL, {
         firstName: formData.firstName,
@@ -27,10 +30,13 @@ const Signup = () => {
         repeat_password: formData.repeat_password,
       });
 
-      navigate("/dashboard/overview");
       localStorage.setItem("accesstoken", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.data));
+
+      setLoading(false);
+      navigate("/dashboard/overview");
     } catch (error) {
+      setLoading(false); 
       if (error.response && error.response.data && error.response.data.data) {
         setSignupError(error.response.data.data);
       } else {
@@ -173,11 +179,12 @@ const Signup = () => {
           <p className="text-red-500 mt-2">{signupError}</p>
         )}
         <div className="flex w-full justify-center">
-          <button
+        <button
             type="submit"
             className="bg-bgGreen hover:bg-white hover:text-[#008F8F] border-2 hover:border-[#008F8F] text-white px-24 py-3 rounded-lg mt-24 font-roboto"
+            disabled={loading}
           >
-          Sign Up
+            {loading ? "Loading..." : "Sign Up"}
           </button>
           
         </div>

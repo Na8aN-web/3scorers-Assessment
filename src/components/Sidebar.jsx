@@ -11,7 +11,7 @@ import logo from "../assets/logo.png";
 const Sidebar = ({ isSidebarOpen }) => {
   return (
     <div
-    className={`fixed lg:relative h-full w-full lg:w-1/6 bg-bgGreen text-white transition-transform duration-300 transform ${
+    className={`fixed lg:relative h-full w-3/4 lg:w-1/6 bg-bgGreen text-white transition-transform duration-300 transform z-50 ${
       isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
     }`}
     >

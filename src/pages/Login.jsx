@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [signupError, setSignupError] = useState("");
   const [loginData, setLoginData] = useState({
     email: "",
@@ -13,22 +14,28 @@ const Login = () => {
 
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     try {
       const response = await axios.post(
         process.env.REACT_APP_LOGIN_URL,
         {
           email: loginData.email,
           password: loginData.password,
-        }, {
-          headers: {"Content-Type": "application/json"}
+        },
+        {
+          headers: { "Content-Type": "application/json" },
         }
       );
+
       localStorage.setItem("accessToken", response.data.accessToken);
       localStorage.setItem("refreshToken", response.data.refreshToken);
       localStorage.setItem("user", JSON.stringify(response.data.data));
-      
+
+      setLoading(false);
       navigate("/dashboard/overview");
     } catch (error) {
+      setLoading(false); 
       if (error.response && error.response.data && error.response.data.data) {
         setSignupError(error.response.data.data);
       } else {
@@ -97,8 +104,9 @@ const Login = () => {
           <button
             type="submit"
             className="bg-bgGreen hover:bg-white hover:text-[#008F8F] border-2 hover:border-[#008F8F] text-white px-24 py-3 rounded-lg sm:my-20 my-4 font-roboto"
+            disabled={loading}
           >
-            Login
+            {loading ? "Loading..." : "Login"} 
           </button>
         </div>
         <h5 className="flex justify-center font-roboto p-2"> <a href="/" className="text-textGreen">Create an account</a></h5>
